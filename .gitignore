@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.idea
+.agents
+.codex
+.claude
+/Poke-Controller-Modified-Extension-master/SerialController/Commands/PythonCommands/**/*Setting.json
