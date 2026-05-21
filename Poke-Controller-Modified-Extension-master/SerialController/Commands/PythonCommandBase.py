@@ -30,6 +30,7 @@ from ImageProcessing import *
 from Commands import CommandBase
 from Commands.Keys import KeyPress, Button
 import requests
+from Commands.CommonUtils import CommonMixin
 
 if TYPE_CHECKING:
     from Window import PokeControllerApp
@@ -46,7 +47,7 @@ class StopThread(Exception):
 # Python command
 
 
-class PythonCommand(CommandBase.Command):
+class PythonCommand(CommandBase.Command, CommonMixin):
     def __init__(self):
         super(PythonCommand, self).__init__()
         self._logger = getLogger(__name__)
@@ -687,23 +688,3 @@ class ImageProcPythonCommand(PythonCommand):
         src = self.camera.readFrame()
 
         opneImage(src, crop=crop_cv2, title=title)
-
-    # ディスコードへの通知を送信
-    def noticeDiscord(self, message=None, embeds=None):
-        webhook_url = os.environ.get('DISCORD_WEBHOOK_URL')
-        if not webhook_url:
-            print('Warning: DISCORD_WEBHOOK_URL environment variable is not set')
-            return
-        data = {
-            'content': message,
-            'embeds': embeds
-        }
-        requests.post(webhook_url, json=data)
-
-    def sleep_switch(self):
-        self.hold(Button.HOME, 2)
-        self.press(Button.A)
-        self.finish()
-
-    def capture_movie_on_switch(self):
-        self.hold(Button.CAPTURE, 2)
